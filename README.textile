@@ -1,5 +1,7 @@
 This repo demonstrates a fundamental problem with Ruby 1.9's strategy of putting the newest version of each gem on the load path.
 
+You can see it in action by running <tt>rake test</tt> in each of 1.8 and 1.9.
+
 In particular, because gem_prelude skips the gem activation step, having a newer version of a dependency of ANY gem will result in the newer version being used.
 
 In this case, the dependency tree is:
