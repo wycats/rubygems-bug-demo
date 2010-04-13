@@ -1,0 +1,22 @@
+This repo demonstrates a fundamental problem with Ruby 1.9's strategy of putting the newest version of each gem on the load path.
+
+In particular, because gem_prelude skips the gem activation step, having a newer version of a dependency of ANY gem will result in the newer version being used.
+
+In this case, the dependency tree is:
+
+rubygems-bug-parent
+|- rubygems-bug-child 1.0
+
+rubygems-bug-child 1.0
+rubygems-bug-child 1.1
+
+<pre>
+require "rubygems"
+require "rubygems-bug-parent"
+</pre>
+
+In Ruby 1.8, requiring @rubygems-bug-parent@ puts <tt>rubygems-bug-child 1.0</tt> on the load path, so when <em>it</em> requires @rubygems-bug-child@, it gets 1.0.
+
+In Ruby 1.9, @rubygems-bug-child@ version @1.1@ is already on the load path (since it's the most recent version on your system). Since the Rubygems gem activation system is never loaded, <tt>require "rubygems-bug-parent"</tt> simply requires the @rubygems-bug-child@ which is on the load path.
+
+In my estimation, this demonstrates a fundamental flaw with the strategy of trying to avoid needing Rubygems for common gems. I recommend shipping with Rubygems as a standard library, but needing <tt>require "rubygems"</tt> (or @-rubygems@) to pull it in, just like any other standard library.
