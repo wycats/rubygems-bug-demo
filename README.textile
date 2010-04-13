@@ -6,11 +6,15 @@ In particular, because gem_prelude skips the gem activation step, having a newer
 
 In this case, the dependency tree is:
 
+<pre>
 rubygems-bug-parent
 |- rubygems-bug-child 1.0
 
 rubygems-bug-child 1.0
 rubygems-bug-child 1.1
+</pre>
+
+Triggering code:
 
 <pre>
 require "rubygems"
